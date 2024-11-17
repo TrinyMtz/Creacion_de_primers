@@ -1,0 +1,119 @@
+if (!require("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+BiocManager::install(version = "3.19")
+
+library(Biostrings)
+
+# Alfabeto extendido de nuecleotidos 
+IUPAC_CODE_MAP
+
+dna2 <- DNAStringSet(c("ACGT", "GTCA", "GCTA"))
+dna2
+
+dna2[2:3] # Seleccionar secuencias
+
+dna2[[2]] # Selec. una unica sec. 
+
+dna2[[2]][1:2] #Seleccionar elementos de una unica secuencia
+
+names(dna2) <- paste0("secuencia_", 1:3) # Nombrar consecutivamente los elementos
+dna2
+
+length(dna2) #Cuantas secuencias tiene guardadas
+width(dna2) # Tamaño de cada una de las secuencias
+
+translate(dna2) #Secuencia de aminoacidos de cada sec
+
+
+dna1 <- DNAString("CGATTTA")
+dna1
+
+reverseComplement(dna1) # Cadena complementaria invertida
+
+alphabetFrequency(dna1) # Frecuencia de cada letra
+
+####### EJERCICIO
+# Complemento, reversocompl, translate
+
+rna_unic <- RNAString("AUGACGGCCUTACUUUGCAGUUCCGUAUAA")
+rna_unic
+
+dna_conj <- DNAStringSet(c("ACGTCTAGTATCGAGCCTAGGAATCAGTCA", 
+                           "GTACGTCAGGGACGTAACGTAAACGACTCA",
+                           "GCTAACTDCCAGTDACAAGTCTASATGCTG"))
+dna_conj
+
+rna_unic
+
+length(rna_unic)
+width(dna_conj)
+
+rev(rna_unic) ; rev(dna_conj)
+
+translate(rna_unic) ; translate(dna_conj)
+
+reverseComplement(dna_conj)
+
+alphabetFrequency(rna_unic) ; alphabetFrequency(dna_conj)
+
+## EJERCICIO 2
+dna4 <- DNAStringSet("ACGTCTAGTATCGAGCCTAGGAATCAGTCA")
+
+dna3 <- DNAStringSet("GTACGTCAGGGACGTAACGTAAACGACTCA")
+
+
+matchPattern("AC", dna4) #ERROR
+
+BiocManager::install("pwalign")
+
+align1 <- pairwiseAlignment(dna3,dna4, type="global")
+align1 # Alineamiento por pares
+
+findPalindromes(dna_conj)
+
+## EJERCICIO 3
+BiocManager::install("XstringSet-io")
+
+sec_fasta <- readAAStringSet("~/sequence (1).fasta")
+sec_fasta
+
+writeXStringSet(sec_fasta, "output.fasta")
+
+
+alphabetFrequency(sec_fasta) # Conteo por letra
+dinucleotideFrequency(sec_fasta) # Conteo DI
+trinucleotideFrequency(sec_fasta) # Conteo TRI
+
+
+
+### EJERCICIOS FINALES
+
+# Ejercicio 1: Creación y manipulación de secuencias
+# Encuentra el complemento inverso de la secuencia.
+# Cuenta las ocurrencias del nucleótido “A”.
+# Extrae la subsecuencia de la posición 3 a la 7.
+
+sec_fasta2 <- readDNAStringSet("~/5to Semestre/Patogenicidad_Bertha/1er parcial/Secuencias de nucleotidos.FASTA")
+sec_fasta2
+reverseComplement(sec_fasta2)
+matchPattern("A", sec_fasta2[[2]])
+subseq(sec_fasta2[[1]], start = 3, end = 10  )
+
+# Ejercicio 2: Coincidencia de patrones
+# Encuentra todas las coincidencias exactas del patrón “AGC”.
+# Realiza coincidencias aproximadas del patrón “AGC” permitiendo 1 desajuste.
+
+matchPattern("AGC", sec_fasta2[[5]])
+matchPattern("GCT", sec_fasta2[[4]], max.mismatch=1)
+
+# Ejercicio 3: Alineación de secuencias
+# Realiza una alineación global entre las secuencias “ACGT” y “AGCT”.
+# Realiza una alineación local entre las secuencias “ACGT” y “CG”.
+# Escribe el resultado de la alineación en un archivo.
+
+alint1 <- pairwiseAlignment(sec_fasta2[[5]], sec_fasta2[[4]], type="global")
+alint2 <- pairwiseAlignment(sec_fasta2[[5]], sec_fasta2[[4]], type="local")
+
+write.phylip(alint1, "output.phy")
+write.phylip(alint2, "output.phy")
+ 

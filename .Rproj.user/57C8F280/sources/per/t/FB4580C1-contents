@@ -1,0 +1,39 @@
+# if (!require("BiocManager", quietly = TRUE))
+#  install.packages("BiocManager")
+
+BiocManager::install("msa")
+
+BiocManager::install("BSgenome")
+
+BiocManager::install("BSgenome.Ecoli.NCBI.20080805")
+
+library(BSgenome.Ecoli.NCBI.20080805)
+
+BSgenome.Ecoli.NCBI.20080805$NC_010473 -> e_coli_K12
+
+### Ejemplos
+# Pocentaje de GC de todas las cepas
+
+letterFrequency(e_coli_K12, "GC")
+
+alphabetFrequency(e_coli_K12)
+alphabetFrequency(e_coli_K12)["C"]
+alphabetFrequency(e_coli_K12)["C"] + alphabetFrequency(e_coli_K12)["G"]
+
+length(e_coli_K12)
+letterFrequency(e_coli_K12, "CG")/(length(e_coli_K12))*100
+
+
+# EJERCICIOS
+# Cacular los porcentajes y comparar (If)
+
+BSgenome.Ecoli.NCBI.20080805$NC_008253 -> coli_536
+BSgenome.Ecoli.NCBI.20080805$NC_009801 -> coli_E24377A
+
+#Compar porcentajes de GC
+cg_536 <- letterFrequency(coli_536,"CG")/(length(coli_536))*100
+cg_E24377A <- letterFrequency(coli_E24377A, "CG")/(length(coli_E24377A))*100
+
+# Compara longuitud
+c536 <- length(coli_536)
+E24377A <- length(coli_E24377A)

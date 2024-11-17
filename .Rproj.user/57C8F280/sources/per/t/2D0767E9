@@ -1,0 +1,27 @@
+{
+    "id": "2D0767E9",
+    "path": "~/5to Semestre/BioInfo_Roberto/clases/proy_mate/scrips/evaluar.R",
+    "project_path": "scrips/evaluar.R",
+    "type": "r_source",
+    "hash": "3914742240",
+    "contents": "",
+    "dirty": false,
+    "created": 1731819519707.0,
+    "source_on_save": false,
+    "relative_order": 8,
+    "properties": {
+        "tempName": "Untitled2",
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "23,53",
+        "scrollLine": "7"
+    },
+    "folds": "12|38|23|70|\n47|36|66|10|\n54|46|65|14|\n60|55|64|14|\n",
+    "lastKnownWriteTime": 1731822206,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1731822206835,
+    "read_only": false,
+    "read_only_alternatives": []
+}
