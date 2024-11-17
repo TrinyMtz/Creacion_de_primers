@@ -59,9 +59,12 @@ primer_fw <-function(inicio_codon, secun_prueba) {
               temperatura <- (4*cont_cg) + (2*cont_at)
               
               if (temperatura >54 & temperatura <66 ) {
+                
+                print("forward")
                 print(primer_fd)
                 print(paste("Porcentaje de CG: ", porc_cg))
                 print(paste("Tm: ", temperatura))
+
               }
               }
           }
@@ -91,13 +94,15 @@ primer_rev_ct1<-function(tga1,secrev) {
     ultima <- ultima + 1
     final<-complement(primer_rv)#la secuencia complentaria
     
-    tripletes <- trinucleotideFrequency(final)#revisar patrones indeseados
+    tripletes <- trinucleotideFrequency(final)#patrones que favorecen horquillas,
+    #dímeros..
     patrones_malos <- tripletes[c(22, 43, 44, 16, 41, 49, 61)]
     no_hay <- c(0,0,0,0,0,0,0)
     comparacion <- all(patrones_malos == no_hay)
-    tolerancia<-sum(patrones_malos!=0)
+    tolerancia<-sum(patrones_malos!=0)#dificil que se cumplan todos, agregar 
+    #tolerancia y reportarla
     
-    if (comparacion == TRUE | tolerancia == 1) { #Si no están esos patrones que siga evaluando
+    if (comparacion == TRUE | tolerancia == 1) { 
       longt <- width(primer_rv)#revisar %gc
       cont_cg <- letterFrequency(primer_rv, "CG")
       porc_cg <- (cont_cg / longt) * 100
@@ -107,17 +112,20 @@ primer_rev_ct1<-function(tga1,secrev) {
         
         temperatura <- (4*cont_cg) + (2*cont_at) ##Tm 
         if (temperatura >54 & temperatura <66 ) {
+          
+          print("reverse tga")
           print(primer_rv)
           print(paste("Porcentaje de CG: ", porc_cg))
           print(paste("Tm: ", temperatura))
+          print(paste(tolerancia))
         }
       }
     }
   }
 } 
 
-
-primer_rev_ct1(114,revertida)#primers con TGA 
+primer_rev_ct1(114,revertida)#primers con TGA, puedes, jugar con los valores de 
+#start del objeto tga, considerando tu región codificante (CDS)
 
 #####Primer con TAG
 
@@ -125,9 +133,9 @@ vmatchPattern("GAT",revertida)->tag
 tag
 
 primer_rev_ct2<-function(tag1,secrev) {
-  detener <- tag1 - 17
+  detener <- tag1 - 20
   inicio <- 0
-  ultima <- 17
+  ultima <- 20
   while (inicio <= detener & ultima < tag1 ) {
     inicio <- inicio + 1  
     primer_rv<- subseq(revertida, start=inicio, end=ultima) 
@@ -140,26 +148,30 @@ primer_rev_ct2<-function(tag1,secrev) {
     comparacion <- all(patrones_malos == no_hay)
     tolerancia<-sum(patrones_malos!=0)#Más complejo que se cumplan requerimientos
     
-    if (comparacion == TRUE | tolerancia==1) { #Seguir evaluando el primer 
-      # Poct de CG
-      longt <- width(primer_rv)
+    if (comparacion == TRUE | tolerancia==1) { 
+      
+      longt <- width(primer_rv)#%gc
       cont_cg <- letterFrequency(primer_rv, "CG")
       porc_cg <- (cont_cg / longt) * 100
       if (porc_cg < 60 & porc_cg > 49) {##%gc
         cont_cg <- letterFrequency(primer_rv, "CG")
         cont_at <- letterFrequency(primer_rv, "AT")
+        
         temperatura <- (4*cont_cg) + (2*cont_at) ##Tm 
         if (temperatura >54 & temperatura <66 ) {
+          print("reverse tag")
           print(primer_rv)
           print(paste("Porcentaje de CG: ", porc_cg))
           print(paste("Tm: ", temperatura))
+          print(paste(tolerancia))
         }
       }
     }
   } 
 } 
 
-primer_rev_ct2(53,revertida)#sujeto a que tenga este patrón
+primer_rev_ct2(53,revertida)#reverse TAG,sujeto a que tenga este patrón,puedes
+#jugar con los valores de start del objeto tga, considerando tu región codificante (CDS)
 
 
 
@@ -189,14 +201,18 @@ primer_rev_ct3<-function(taa1,secrev) {
         cont_at <- letterFrequency(primer_rv, "AT")
         temperatura <- (4*cont_cg) + (2*cont_at) ##Tm 
         if (temperatura >54 & temperatura <66 ) {
+          print("reverse taa")
           print(primer_rv)
           print(paste("Porcentaje de CG: ", porc_cg))
           print(paste("Tm: ", temperatura))
+          print(paste(tolerancia))
         }
       }
     }
   } 
 }
-primer_rev_ct3(37,revertida)
+primer_rev_ct3(37,revertida)#reverse TAG,sujeto a que tenga este patrón,puedes
+#jugar con los valores de start del objeto tga, considerando tu región codificante (CDS)
+
 
 
