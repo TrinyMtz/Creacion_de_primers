@@ -36,7 +36,7 @@ pre_fw(secun_prueba1) # Prueba
 #  GENERADOR DE PRIMERS FORWARD
 
 primer_fw <-function(inicio_codon, secun_prueba, ultima) {
-  detener <- inicio_codon - 20
+  detener <- inicio_codon - ultima
   inicio <- 0
   while (inicio <= detener & ultima < inicio_codon ) {
           inicio <- inicio + 1  
@@ -93,7 +93,7 @@ vmatchPattern("AGT",revertida)->tga
 tga
 
 primer_rev_ct1<-function(tga1,secrev,ultima) {
-  detener <- tga1 - 20
+  detener <- tga1 - ultima
   inicio <- 0
   while (inicio <= detener & ultima < tga1 ) {
     inicio <- inicio + 1  
@@ -141,7 +141,7 @@ vmatchPattern("GAT",revertida)->tag
 tag
 
 primer_rev_ct2<-function(tag1,secrev,ultima) {
-  detener <- tag1 - 20
+  detener <- tag1 - ultima
   inicio <- 0
   while (inicio <= detener & ultima < tag1 ) {
     inicio <- inicio + 1  
@@ -188,7 +188,7 @@ vmatchPattern("AAT",revertida)->taa
 taa
 
 primer_rev_ct3<-function(taa1,secrev,ultima) {
-  detener <- taa1 - 20
+  detener <- taa1 - ultima
   inicio <- 0
   while (inicio <= detener & ultima < taa1 ) {
     inicio <- inicio + 1  
