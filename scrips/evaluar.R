@@ -1,7 +1,7 @@
 ###################
 library(Biostrings)
 
-# Lect de la sec
+# Lectura de la secuencia
 secun_prueba1 <- readDNAStringSet("Creacion_de_primers/extras/gallus.fasta")
 secun_prueba1
                    ############################
@@ -14,7 +14,7 @@ pre_fw <- function(secun_prueba) {
   tipo_sec <- class(secun_prueba)
   tipo_sec[1]
   
-  # Para evaluar tp de secuencia
+  # Para evaluar tipo de secuencia
   if (tipo_sec[1] == "DNAStringSet") {
     # Comprobar que no es degenerado
     no_degenerado <- alphabetFrequency(secun_prueba, baseOnly=TRUE)
@@ -26,10 +26,11 @@ pre_fw <- function(secun_prueba) {
       # Codon de inicio: TAC -> ATG
         codon_in <- vmatchPattern("ATG", secun_prueba)
         codon_in[[1]][1]
+        print(codon_in)
       } else { print("La capacidad maxima es de 20,000 nucleotidos")}}} else { print("Cambiar a DNA")}
   }
     
-pre_fw(secun_prueba1) # Prueba
+pre_fw(secun_prueba1) #Si el patrón está muy cerca, porque está más de una vez, intenete con otras posiciones
 
 ####################
 
@@ -77,7 +78,7 @@ primer_fw <-function(inicio_codon, secun_prueba, ultima) {
   } 
 
 
-primer_fw(122, secun_prueba1, 18) # Colocar el valor del start , secuencia, long del primer. 
+primer_fw(32, secun_prueba1, 18) # Colocar el valor del start , secuencia, long del primer. 
 
                    ############################
 ####################     PRIMERS REVERSE      ############################
@@ -107,10 +108,8 @@ primer_rev_ct1<-function(tga1,secrev,ultima) {
     patrones_malos <- tripletes[c(22, 43, 44, 16, 41, 49, 61)]
     no_hay <- c(0,0,0,0,0,0,0)
     comparacion <- all(patrones_malos == no_hay)
-    tolerancia<-sum(patrones_malos!=0)#dificil que se cumplan todos, agregar 
-    #tolerancia y reportarla
-    
-    if (comparacion == TRUE | tolerancia == 1) { 
+
+    if (comparacion == TRUE) { 
       longt <- width(primer_rv)#revisar %gc
       cont_cg <- letterFrequency(primer_rv, "CG")
       porc_cg <- (cont_cg / longt) * 100
@@ -125,7 +124,6 @@ primer_rev_ct1<-function(tga1,secrev,ultima) {
           print(primer_rv)
           print(paste("Porcentaje de CG: ", porc_cg))
           print(paste("Tm: ", temperatura))
-          print(paste(tolerancia))
         }
       }
     }
@@ -154,9 +152,8 @@ primer_rev_ct2<-function(tag1,secrev,ultima) {
     patrones_malos <- tripletes[c(22, 43, 44, 16, 41, 49, 61)]
     no_hay <- c(0,0,0,0,0,0,0)
     comparacion <- all(patrones_malos == no_hay)
-    tolerancia<-sum(patrones_malos!=0)#Más complejo que se cumplan requerimientos
     
-    if (comparacion == TRUE | tolerancia==1) { 
+    if (comparacion == TRUE) { 
       
       longt <- width(primer_rv)#%gc
       cont_cg <- letterFrequency(primer_rv, "CG")
@@ -172,7 +169,6 @@ primer_rev_ct2<-function(tag1,secrev,ultima) {
           print(primer_rv)
           print(paste("Porcentaje de CG: ", porc_cg))
           print(paste("Tm: ", temperatura))
-          print(paste(tolerancia))
         }
       }
     }
@@ -216,7 +212,6 @@ primer_rev_ct3<-function(taa1,secrev,ultima) {
           print(primer_rv)
           print(paste("Porcentaje de CG: ", porc_cg))
           print(paste("Tm: ", temperatura))
-          print(paste(tolerancia))
         }
       }
     }
