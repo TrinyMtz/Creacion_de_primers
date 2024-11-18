@@ -24,8 +24,7 @@ Se diseña un par de primers **_Forward (Fw)_**, complementario a la secuencia 3
 
 para evitar la formación de horquillas (hairpins).
 
-6. Primers deben ser distintos entre sí, para evitar la formación de
-    dímeros
+6. Primers deben ser distintos entre sí, para evitar la formación de dímeros.
 
 ### Tm
 Es la temperatura a la cual una parte de la secuencia de DNA se encuentra en forma 

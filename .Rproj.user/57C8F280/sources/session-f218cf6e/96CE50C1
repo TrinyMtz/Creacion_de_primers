@@ -3,7 +3,7 @@
     "path": "~/5to Semestre/BioInfo_Roberto/clases/Creacion_de_primers/extras/Uso_del_proyecto.Rmd",
     "project_path": "extras/Uso_del_proyecto.Rmd",
     "type": "r_markdown",
-    "hash": "1980112879",
+    "hash": "1850987341",
     "contents": "",
     "dirty": false,
     "created": 1731970935156.0,
@@ -12,15 +12,15 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "79,0",
-        "scrollLine": "64"
+        "cursorPosition": "155,58",
+        "scrollLine": "154"
     },
     "folds": "",
-    "lastKnownWriteTime": 1731972443,
+    "lastKnownWriteTime": 1731973493,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1731972443963,
+    "last_content_update": 1731973493658,
     "read_only": false,
     "read_only_alternatives": []
 }

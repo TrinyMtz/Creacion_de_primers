@@ -41,7 +41,7 @@ siguientes requerimientos:
 
 ## Creación de la función para evaluar la secuencia
 
-```{r}
+```{r, include = TRUE}
 pre_fw <- function(secun_prueba) {
   tipo_sec <- class(secun_prueba)
   tipo_sec[1]
@@ -70,9 +70,9 @@ pre_fw <- function(secun_prueba) {
 
 ```
 
-## Uso de la funcion 
+***Uso de la funcion***
 
-```{r}
+```{r, include = TRUE}
 secun_prueba1 <- readDNAStringSet("Creacion_de_primers/extras/gallus.fasta") # 1. Cargar secuencia
 
 pre_fw(secun_prueba1) 
@@ -80,8 +80,6 @@ pre_fw(secun_prueba1)
 # El codon de inicio: si está muy cerca, porque está más de una vez, intenete con otras posiciones
 
 ```
-
-pre_fw(secun_prueba1)
 
 #### Función *fw_primer**
 
@@ -92,12 +90,52 @@ parámetros:
 -   Secuencia a evaluar
 -   Longitud de la secuencia a evaluar
 
-```{r}
+```{r, include=TRUE}
+primer_fw <-function (inicio_codon, secun_prueba, ultima) {
+  detener <- inicio_codon - ultima
+  inicio <- 0
+  while (inicio <= detener & ultima < inicio_codon ) {
+          inicio <- inicio + 1  
+          primer_fd <- subseq (secun_prueba, start=inicio, end=ultima) 
+          ultima <- ultima + 1
+          
+          final<-complement(primer_fd)
+          ##### Eveluar condiciones de primer
+          # Patrones
 
+          tripletes <- trinucleotideFrequency(final)
+          patrones_malos <- tripletes[c(22, 43, 44, 16, 41, 49, 61)]
+          no_hay <- c(0,0,0,0,0,0,0)
+          comparacion <- all(patrones_malos == no_hay)
+          
+          if (comparacion == TRUE) { #Seguir evaluando el primer 
+
+            # Poct de CG: 50-60 %
+            longt <- width(final)
+            cont_cg <- letterFrequency(final, "CG")
+            porc_cg <- (cont_cg / longt) * 100
+            
+            if (porc_cg < 61 & porc_cg > 49) {#Seguir evaluando
+              #Temperatura: 55 - 65 °C
+              cont_cg <- letterFrequency(final, "CG")
+              cont_at <- letterFrequency(final, "AT")
+              temperatura <- (4*cont_cg) + (2*cont_at)
+              
+              if (temperatura >54 & temperatura <66 ) {
+                
+                print("Forward")
+                print(final)
+                print(paste("Porcentaje de CG: ", porc_cg))
+                print(paste("Tm: ", temperatura,"°C"))
+
+              }
+              }
+          }
+          } 
+  } 
 ```
 
 Un ciclo `while` hace una iteración tantas veces desde el codón de inicio hasta la última base de la secuencia, siempre y cuando la posición de la base en donde se inicia se encuentre sea correspondiente a un número dentro de la longitud de la secuencia.  
-   
 
 El resultado es el primer, la secuencia complementaria, que es evaluado mediante instrucciones `if()` a fin de que cumpla los diferentes criterios:
 
@@ -108,6 +146,12 @@ El resultado es el primer, la secuencia complementaria, que es evaluado mediante
   + Tripletes GGG, CCC, GGT, ATT, CGA, TAA o TTA 
 * Porcentaje de GC entre 50%-60% 
 + Temperatura de fusión entre 55-65°C, se calcula como TM = 4GC + 2 AT
+
+***Ejemplo de aplicacón de la función***
+
+```{r, include=TRUE}
+primer_fw (32, secun_prueba1, 18) # Colocar el valor del start , secuencia, long del primer.
+```
 
 Implementación completa en: [evaluar.R](scrips/evaluar.R).
 
