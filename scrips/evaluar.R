@@ -73,7 +73,7 @@ primer_fw <-function (inicio_codon, secun_prueba, ultima) {
                 print("Forward")
                 print(final)
                 print(paste("Porcentaje de CG: ", porc_cg))
-                cat ("Tm: ", temperatura, "°C\n")
+                print(paste("Tm: ", temperatura,"°C"))
 
               }
               }
@@ -96,7 +96,7 @@ primer_fw (32, secun_prueba1, 18) # Colocar el valor del start , secuencia, long
 revertida <-reverse(secun_prueba1)
 revertida
 
-vmatchPattern ("AGT",revertida) -> tga
+vmatchPattern ("AGT",revertida) -> tga 
 tga
 
 primer_rev_ct1<-function(tga1,secrev,ultima) {
@@ -129,7 +129,7 @@ primer_rev_ct1<-function(tga1,secrev,ultima) {
           print("reverse tga")
           print(primer_rv)
           print(paste("Porcentaje de CG: ", porc_cg))
-          cat ("Tm: ", temperatura, "°C/n")
+          print(paste("Tm: ", temperatura,"°C"))
         }
       }
     }
@@ -177,7 +177,7 @@ primer_rev_ct2<-function(tag1,secrev,ultima) {
           print("reverse tag")
           print(primer_rv)
           print(paste("Porcentaje de CG: ", porc_cg))
-          cat ("Tm: ", temperatura, "°C/n")
+          print(paste("Tm: ", temperatura,"°C"))
         }
       }
     }
@@ -221,7 +221,7 @@ primer_rev_ct3<-function(taa1,secrev,ultima) {
           print("reverse taa")
           print(primer_rv)
           print(paste("Porcentaje de CG: ", porc_cg))
-          cat ("Tm: ", temperatura, "°C/n")
+          print(paste("Tm: ", temperatura,"°C"))
         }
       }
     }

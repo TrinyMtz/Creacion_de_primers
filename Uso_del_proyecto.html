@@ -9,7 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="bo" />
+<meta name="author" content="bo, Triny, JuGo" />
 
 <meta name="date" content="2024-11-17" />
 
@@ -351,7 +351,7 @@ display: none;
 
 
 <h1 class="title toc-ignore">R_para_primers</h1>
-<h4 class="author">bo</h4>
+<h4 class="author">bo, Triny, JuGo</h4>
 <h4 class="date">2024-11-17</h4>
 
 </div>
@@ -361,9 +361,10 @@ display: none;
 <h2>R para primers</h2>
 <p>El diseño de primers con herramientas computacionales no es novedad,
 incluso hay paquetes en R que pueden ayudarte a esta tarea como
-openPrimeR de Bioconductor. Este proyecto hace uso de ciclos, funciones
-y condiciones para encontrar primers en secuencias de no más de 20, 000
-nucleótidos, sólo de DNA, sólo para eucariotas.</p>
+openPrimeR de Bioconductor. Este proyecto hace uso del programa
+Biostrings, ciclos, funciones y condiciones para encontrar primers en
+secuencias de no más de 20,000 nucleótidos, sólo de DNA, sólo para
+eucariotas.</p>
 <pre class="r"><code>summary(cars)</code></pre>
 <pre><code>##      speed           dist       
 ##  Min.   : 4.0   Min.   :  2.00  
@@ -380,7 +381,7 @@ nucleótidos, sólo de DNA, sólo para eucariotas.</p>
 <li>Longitud de 20 pb</li>
 <li>Porcentaje de contenido GC de 50%-60%</li>
 <li>Temperatura de fusión (Tm) dentro del rango de diseño: 55-65°C</li>
-<li>Primers seben ser distintos entre sí, para evitar la formación de
+<li>Primers deben ser distintos entre sí, para evitar la formación de
 dímeros</li>
 </ul>
 <p>Este programa permite el diseño de primers <em>forward</em> (Fw) y
@@ -389,9 +390,9 @@ dímeros</li>
 </div>
 <div id="pre-evaluación-de-la-secuencia" class="section level2">
 <h2>Pre-evaluación de la secuencia</h2>
-<p>Función <strong><em>pre_fw</em></strong> realiza un asesoramiento
-inicial de la secuencia para verificar los siguientes
-requerimientos:</p>
+<p>Función <code>pre_fw</code> realiza un asesoramiento inicial de la
+secuencia codificante mediante el uso de la instrucción
+<code>if()</code> para verificar los siguientes requerimientos:</p>
 <ul>
 <li>La secuencia se trate de un DNAStringSet</li>
 <li>No es degenerado</li>
@@ -402,33 +403,52 @@ requerimientos:</p>
 <div id="primers-forward" class="section level2">
 <h2>Primers <em>Forward</em></h2>
 <p>El primer <em>forward</em> debe ser complementario a la cadena de ADN
-a la que se une. Este se une a la cadena antisentido del ADN, la regi+on
+a la que se une. Este se une a la cadena antisentido del ADN, la región
 no codificante.</p>
-<div id="section" class="section level4">
-<h4></h4>
-<p>Función que mediante un ciclo while, que evalúa desde el codón de
-inicio</p>
-<p>una función</p>
-<div id="evaluación-del-primer-forward" class="section level5">
-<h5>Evaluación del primer <em>forward</em></h5>
+<div id="función-fw_primer" class="section level4">
+<h4>Función *fw_primer**</h4>
+<p><code>fw_primer</code> evalúa primers <em>forward</em> potenciales
+tomando en cuenta 3 parámetros:</p>
+<ul>
+<li>Posición del codón de inicio<br />
+</li>
+<li>Secuencia a evaluar</li>
+<li>Longitud de la secuencia a evaluar</li>
+</ul>
+<p>Un ciclo <code>while</code> hace una iteración tantas veces desde el
+codón de inicio hasta la última base de la secuencia, siempre y cuando
+el la posición de la base en inicial se encuentre en una posición dentro
+de la longitud de la secuencia.</p>
+<p>El resultado es una secuencia complementaria que es evaluada mediante
+instrucciones <code>if()</code> a fin de que cumpla los diferentes
+criterios:</p>
+<p><strong><em>Evaluación</em></strong></p>
 <ul>
 <li>Longitud de 20 pb</li>
-<li>Presencia de secuencias que favorecen la formación de horquillas:
+<li>Presencia de secuencias quefavorecen la formación de horquillas:
 <ul>
 <li>Tripletes GGG, CCC, GGT, ATT, CGA, TAA o TTA</li>
 </ul></li>
-<li>Porcentage de GC entre 50%-60%</li>
+<li>Porcentaje de GC entre 50%-60%</li>
 <li>Temperatura de fusión entre 55-65°C, se calcula como TM = 4GC + 2
 AT</li>
 </ul>
 <p>Implementación completa en: <a href="scrips/evaluar.R">evaluar.R</a>.</p>
 </div>
 </div>
+<div id="primers-reverse-y-codones-de-terminación" class="section level2">
+<h2>Primers <em>Reverse</em> y codones de Terminación</h2>
+<div id="tga---primer_rev_ct1" class="section level4">
+<h4>TGA - <strong><em>primer_rev_ct1</em></strong></h4>
+<p>TGA <code>primer_rev_ct1</code></p>
 </div>
-<div id="primers-reverse" class="section level2">
-<h2>Primers <em>Reverse</em></h2>
-<div id="primer-reverse-y-codones-de-paro" class="section level4">
-<h4>Primer <em>reverse</em> y codones de paro</h4>
+<div id="tag---primer_rev_ct2" class="section level4">
+<h4>TAG - <strong><em>primer_rev_ct2</em></strong></h4>
+<p>TAG <code>primer_rev_ct2</code></p>
+</div>
+<div id="taa---primer_rev_ct3" class="section level4">
+<h4>TAA - <strong><em>primer_rev_ct3</em></strong></h4>
+<p>TAA <code>primer_rev_ct3</code></p>
 </div>
 </div>
 
