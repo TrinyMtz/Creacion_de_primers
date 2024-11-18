@@ -1,3 +1,4 @@
+####      Código pero que lo convierta a FASTA
 
 library(Biostrings)
 
@@ -18,59 +19,69 @@ pre_fw <- function (secun_prueba) {
       # Verificar el largo de la secuencia
       longt <- width(secun_prueba)
       if ( longt < 20000) {
-      # Codon de inicio: TAC -> ATG
+        # Codon de inicio: TAC -> ATG
         codon_in <- vmatchPattern ("ATG", secun_prueba)
         codon_in[[1]][1]
       } else { print("La capacidad maxima es de 20,000 nucleotidos")}}} else { print("Cambiar a DNA")}
-  }
-    
+}
+
 pre_fw (secun_prueba1)    
 
 ######################
 
 ### FORWARD 
-        
+
 primer_fw <-function (inicio_codon, secun_prueba) {
+  primer <- list() #Para que aparezcan opor separado del mensaje y no salgan como NULL
   detener <- inicio_codon - 20
   inicio <- 0
   ultima <- 20
   while (inicio <= detener & ultima < inicio_codon ) {
-          inicio <- inicio + 1  
-          primer_fd <- subseq (secun_prueba, start=inicio, end=ultima) 
-          ultima <- ultima + 1
-          
-          ##### Eveluar condiciones de primer
-          # Patrones
-          tripletes <- trinucleotideFrequency(primer_fd)
-          patrones_malos <- tripletes [c(22, 43, 44, 16, 41, 49, 61)]
-          no_hay <- c(0,0,0,0,0,0,0)
-          comparacion <- all(patrones_malos == no_hay)
-          
-          if (comparacion == TRUE) { #Seguir evaluando el primer 
-            
-            # Porcentage de CG
-            longt <- width(primer_fd)
-            cont_cg <- letterFrequency(primer_fd, "CG")
-            porc_cg <- (cont_cg / longt) * 100
-            
-            if (porc_cg < 60 & porc_cg > 49) {#Seguir evaluando
-              #Temperatura: 55 - 65 °C
-              cont_cg <- letterFrequency(primer_fd, "CG")
-              cont_at <- letterFrequency(primer_fd, "AT")
-              temperatura <- (4*cont_cg) + (2*cont_at)
-              
-              if (temperatura >54 & temperatura <66 ) {
-                print(primer_fd)
-                print(paste("Porcentaje de CG: ", porc_cg))
-                print(paste("Tm: ", temperatura))
-              }
-              }
-          }
-          } 
-  } 
+    inicio <- inicio + 1  
+    primer_fd <- subseq (secun_prueba, start=inicio, end=ultima) 
+    ultima <- ultima + 1
+    
+    ##### Eveluar condiciones de primer
+    # Patrones
+    tripletes <- trinucleotideFrequency(primer_fd)
+    patrones_malos <- tripletes [c(22, 43, 44, 16, 41, 49, 61)]
+    no_hay <- c(0,0,0,0,0,0,0)
+    comparacion <- all(patrones_malos == no_hay)
+    
+    if (comparacion == TRUE) { #Seguir evaluando el primer 
+      
+      # Porcentage de CG
+      longt <- width(primer_fd)
+      cont_cg <- letterFrequency(primer_fd, "CG")
+      porc_cg <- (cont_cg / longt) * 100
+      
+      if (porc_cg < 60 & porc_cg > 49) {#Seguir evaluando
+        #Temperatura: 55 - 65 °C
+        cont_cg <- letterFrequency(primer_fd, "CG")
+        cont_at <- letterFrequency(primer_fd, "AT")
+        temperatura <- (4*cont_cg) + (2*cont_at)
+        
+        if (temperatura >54 & temperatura <66 ) {
+          mensaje <- paste("Porcentaje de CG:", porc_cg, "Tm:", temperatura) 
+          primer <- (list (list(primer = primer_fd, mensaje = mensaje)))
+        }
+      }
+    }
+  }
+  return (primer)
+} 
 
+primer_fw (32, secun_prueba1) #poner el valor de  interger, donde está el codón ATG    
 
-primer_fw (32, secun_prueba1) ##poner el valor de  interger, donde está el codón ATG    
+#Guardar como objeto 
+forward_primer <- primer_fw (32, secun_prueba1)
+print(forward_primer) #esto muestra la lista, la secuencia y el mensaje
+
+#Como están en una lista, se extraigo individualmente la secuencia
+fw_secuencia <- lapply(forward_primer, function(x) x$primer)
+print (fw_secuencia) 
+class(fw_secuencia)
+
 
 ###############
 
@@ -85,6 +96,7 @@ vmatchPattern ("AGT",revertida) -> tga
 tga
 
 primer_rev_ct1 <- function (tga1,secrev) {
+  primer <- list ()
   detener <- tga1 - 20
   inicio <- 0
   ultima <- 20
@@ -110,24 +122,34 @@ primer_rev_ct1 <- function (tga1,secrev) {
         
         temperatura <- (4*cont_cg) + (2*cont_at) ##Tm 
         if (temperatura >54 & temperatura <66 ) {
-          print(primer_rv)
-          print(paste("Porcentaje de CG: ", porc_cg))
-          print(paste("Tm: ", temperatura))
+          mensaje <- paste("Porcentaje de CG:", porc_cg, "Tm:", temperatura) 
+          primer <- (list (list (primer = primer_rv, mensaje = mensaje)))
+          
         }
       }
     }
   }
+  return (primer)
 } 
 
 
-primer_rev_ct1(114,revertida) #primers con TGA 
+primer_rev_ct1 (114,revertida) #primers con TGA 
+
+#Guardar en un objeto 
+tga_rv_primer <- primer_rev_ct1(114,revertida)
+#Obtener secuencia individual
+tga_secuencia <- tga_rv_primer[[1]]$primer
+print (tga_secuencia) 
+class(tga_secuencia) #queda como un objeto en Biostrings
+
 
 #####Primer con TAG
 
-vmatchPattern ("GAT",revertida)->tag
-tag
+vmatchPattern ("GAT", revertida)-> tag
+print (tag)
 
 primer_rev_ct2 <- function(tag1,secrev) {
+  primer <- list ()
   detener <- tag1 - 17
   inicio <- 0
   ultima <- 17
@@ -153,22 +175,32 @@ primer_rev_ct2 <- function(tag1,secrev) {
         cont_at <- letterFrequency(primer_rv, "AT")
         temperatura <- (4*cont_cg) + (2*cont_at) ##Tm 
         if (temperatura >54 & temperatura <66 ) {
-          print(primer_rv)
-          print(paste("Porcentaje de CG: ", porc_cg))
-          print(paste("Tm: ", temperatura))
+          mensaje <- paste ("Porcentaje de CG:", porc_cg, "Tm:", temperatura) 
+          primer <- ( list (list (primer = primer_rv, mensaje = mensaje)))
         }
       }
     }
   } 
+  return (primer)
 } 
 
-primer_rev_ct2(53,revertida) #sujeto que tenga este patrón
+primer_rev_ct2 (53,revertida) #sujeto a que tenga este patrón
+
+#Guardar en un objeto 
+tag_rv_primer <- primer_rev_ct2 (53,revertida)
+#Obtener secuencia individual
+tag_secuencia <- (tag_rv_primer[[1]]$primer)
+print (tag_secuencia) 
+class(tag_secuencia)
+
+
 
 ######Primers con TAA
 vmatchPattern("AAT",revertida)->taa
 taa
 
-primer_rev_ct3<-function(taa1,secrev) {
+primer_rev_ct3 <- function(taa1,secrev) {
+  primer <- list()
   detener <- taa1 - 20
   inicio <- 0
   ultima <- 20
@@ -190,15 +222,62 @@ primer_rev_ct3<-function(taa1,secrev) {
         cont_at <- letterFrequency(primer_rv, "AT")
         temperatura <- (4*cont_cg) + (2*cont_at) ##Tm 
         if (temperatura >54 & temperatura <66 ) {
-          print(primer_rv)
-          print(paste("Porcentaje de CG: ", porc_cg))
-          print(paste("Tm: ", temperatura))
+          mensaje <- paste("Porcentaje de CG:", porc_cg, "Tm:", temperatura) 
+          primer <- (list (list (primer = primer_rv, mensaje = mensaje)))
         }
       }
     }
   } 
+  return (primer)
 }
-primer_rev_ct3(37,revertida)
+
+primer_rev_ct3 (37,revertida)
+
+#Guardar en un objeto 
+taa_rv_primer <- primer_rev_ct3 (37,revertida)
+#Obtener secuencia individual
+taa_secuencia <- (taa_rv_primer[[1]]$primer)
+print (taa_secuencia) 
+class(taa_secuencia)
+
+
+## FASTA
+mandar_fasta <- function (primers, nombres) {
+  fileConn <- file(filename) for (i in seq_along(primers)) 
+  { cat(paste0 (">primer_", i, "\n", 
+               as.character(primers[[i]]), 
+               "\n"), file = fileConn) } 
+  close(fileConn) 
+  }
+
+
+#Combinar los primers en una lista, todos son DNA Strings en una lista 
+lista_primers <- list (
+  list (nombre = "Forward primer", secuencia = fw_secuencia), 
+  list (nombre = "TGA - Reverse primer", secuencia = tag_secuencia),
+  list (nombre = "TAG - Reverse primer", secuencia = tga_secuencia), 
+  list (nombre = "TAA - Reverse primer", secuencia = taa_secuencia)
+)
+lista_primers
+
+#Se separan los nombres de las secuencias para poder reescribirlos en un archivo FASTA 
+lista_secuencias <- c (lista_primers[[1]]$secuencia, lista_primers[[2]]$secuencia, lista_primers[[3]]$secuencia) 
+print(lista_secuencias)
+
+lista_nombres <- c(lista_primers[[1]]$nombre, lista_primers[[2]]$nombre, lista_primers[[3]]$nombre)
+print (lista_nombres)
+
+#sequinr los lee como listas 
+install.packages ("seqinr")
+library (seqinr)
+
+#Mandar a carpeta scripts en resultados 
+write.fasta (sequences = lista_secuencias, names = lista_nombres, nbchar = 80, file.out = "resultados/primers.fasta")
+
+
+
+
+
 
 
 
