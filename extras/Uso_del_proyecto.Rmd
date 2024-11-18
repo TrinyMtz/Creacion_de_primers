@@ -39,11 +39,49 @@ siguientes requerimientos:
 -   Longitud de la secuencia \< 20,000 nucleótidos
 -   Contiene el codón de inicio ATG (para metionina)
 
+## Creación de la función para evaluar la secuencia
+
 ```{r}
+pre_fw <- function(secun_prueba) {
+  tipo_sec <- class(secun_prueba)
+  tipo_sec[1]
+  
+  # Para evaluar tipo de secuencia
+  if (tipo_sec[1] == "DNAStringSet") {
+   
+     # Comprobar que no es degenerado
+    no_degenerado <- alphabetFrequency(secun_prueba, baseOnly=TRUE)
+    if (no_degenerado[5] == 0) {
+      
+      # Verificar el largo de la secuencia
+      longt <- width(secun_prueba)
+      if ( longt < 20000) {
+        
+        # Codon de inicio: TAC -> ATG
+        codon_in <- vmatchPattern ("ATG", secun_prueba)
+        codon_in[[1]][1]
+        print(codon_in)
+      } else { 
+        print("La capacidad maxima es de 20,000 nucleotidos")}}
+  } else { 
+      print("Cambiar a DNA")
+    }
+  }
 
 ```
 
-## Primers *Forward*
+## Uso de la funcion 
+
+```{r}
+secun_prueba1 <- readDNAStringSet("Creacion_de_primers/extras/gallus.fasta") # 1. Cargar secuencia
+
+pre_fw(secun_prueba1) 
+
+# El codon de inicio: si está muy cerca, porque está más de una vez, intenete con otras posiciones
+
+```
+
+pre_fw(secun_prueba1)
 
 #### Función *fw_primer**
 
