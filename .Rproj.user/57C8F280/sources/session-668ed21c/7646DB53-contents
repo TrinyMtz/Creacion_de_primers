@@ -5,7 +5,7 @@
 ### ¿Qué son?
 Los primes o cebadores son ***secuencias cortas de nucleotidos*** que marcan el punto de partida para la ***sintesis del DNA por la DNA polimerasa***. En una PCR, permiten seleccionar la región de DNA que se busca amplificar o copiar. 
 
-Se diseña un par de primers **_Forward (Fw)_**, correspondiente a la secuencia 5'-3' en ell extremo 5', y **_Reverse (Rev)_**, complementario a la secuencia 5'-3' en el extremo 3'. 
+Se diseña un par de primers **_Forward (Fw)_**, complementario a la secuencia 3'-5' en el extremo 3', y **_Reverse (Rev)_**, complementario a la secuencia 5'-3' en el extremo 3'. 
 
 ### Caracteristicas
 - Son de cadena sencilla.
@@ -23,6 +23,9 @@ Se diseña un par de primers **_Forward (Fw)_**, correspondiente a la secuencia 
             GGG, CCC, GGT, ATT, CGA, TAA O TTA. 
 
 para evitar la formación de horquillas (hairpins).
+
+6. Primers deben ser distintos entre sí, para evitar la formación de
+    dímeros
 
 ### Tm
 Es la temperatura a la cual una parte de la secuencia de DNA se encuentra en forma 
