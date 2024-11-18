@@ -2,7 +2,7 @@
 
 library(Biostrings)
 
-secun_prueba1 <- readDNAStringSet("Creacion_de_primers/extras/gallus.fasta")
+secun_prueba1 <- readDNAStringSet("extras/gallus.fasta")
 secun_prueba1
 
 ### Evaluación  
@@ -36,7 +36,7 @@ primer_fw <-function (inicio_codon, secun_prueba) {
   detener <- inicio_codon - 20
   inicio <- 0
   ultima <- 20
-  while (inicio <= detener & ultima < inicio_codon ) {
+  while (inicio <= detener & ultima < inicio_codon) {
     inicio <- inicio + 1  
     primer_fd <- subseq (secun_prueba, start=inicio, end=ultima) 
     ultima <- ultima + 1
@@ -68,19 +68,16 @@ primer_fw <-function (inicio_codon, secun_prueba) {
       }
     }
   }
-  return (primer)
 } 
 
 primer_fw (32, secun_prueba1) #poner el valor de  interger, donde está el codón ATG    
 
-#Guardar como objeto 
+####Guardar en un objeto 
 forward_primer <- primer_fw (32, secun_prueba1)
-print(forward_primer) #esto muestra la lista, la secuencia y el mensaje
-
-#Como están en una lista, se extraigo individualmente la secuencia
-fw_secuencia <- lapply(forward_primer, function(x) x$primer)
+#Obtener secuencia individual
+fw_secuencia <- forward_primer[[1]]$primer
 print (fw_secuencia) 
-class(fw_secuencia)
+class(fw_secuencia) 
 
 
 ###############
@@ -97,6 +94,7 @@ tga
 
 primer_rev_ct1 <- function (tga1,secrev) {
   primer <- list ()
+  primer_encontrado <- FALSE
   detener <- tga1 - 20
   inicio <- 0
   ultima <- 20
@@ -124,11 +122,13 @@ primer_rev_ct1 <- function (tga1,secrev) {
         if (temperatura >54 & temperatura <66 ) {
           mensaje <- paste("Porcentaje de CG:", porc_cg, "Tm:", temperatura) 
           primer <- (list (list (primer = primer_rv, mensaje = mensaje)))
-          
+          primer_encontrado <- TRUE
         }
       }
     }
   }
+  if (length(primer) == 0) {
+    primer <- NULL } 
   return (primer)
 } 
 
@@ -150,6 +150,7 @@ print (tag)
 
 primer_rev_ct2 <- function(tag1,secrev) {
   primer <- list ()
+  primer_encontrado <- FALSE
   detener <- tag1 - 17
   inicio <- 0
   ultima <- 17
@@ -177,10 +178,13 @@ primer_rev_ct2 <- function(tag1,secrev) {
         if (temperatura >54 & temperatura <66 ) {
           mensaje <- paste ("Porcentaje de CG:", porc_cg, "Tm:", temperatura) 
           primer <- ( list (list (primer = primer_rv, mensaje = mensaje)))
+          primer_encontrado <- TRUE
         }
       }
     }
   } 
+  if (length(primer) == 0) {
+    primer <- NULL } 
   return (primer)
 } 
 
@@ -201,6 +205,7 @@ taa
 
 primer_rev_ct3 <- function(taa1,secrev) {
   primer <- list()
+  primer_encontrado <- FALSE
   detener <- taa1 - 20
   inicio <- 0
   ultima <- 20
@@ -224,10 +229,13 @@ primer_rev_ct3 <- function(taa1,secrev) {
         if (temperatura >54 & temperatura <66 ) {
           mensaje <- paste("Porcentaje de CG:", porc_cg, "Tm:", temperatura) 
           primer <- (list (list (primer = primer_rv, mensaje = mensaje)))
+          primer_encontrado <- TRUE
         }
       }
     }
   } 
+  if (length(primer) == 0) {
+    primer <- NULL } 
   return (primer)
 }
 
@@ -235,34 +243,68 @@ primer_rev_ct3 (37,revertida)
 
 #Guardar en un objeto 
 taa_rv_primer <- primer_rev_ct3 (37,revertida)
+
 #Obtener secuencia individual
 taa_secuencia <- (taa_rv_primer[[1]]$primer)
 print (taa_secuencia) 
 class(taa_secuencia)
 
 
-#Combinar los primers en una lista, todos son DNA Strings en una lista 
-lista_primers <- list (
-  list (nombre = "Forward primer", secuencia = fw_secuencia), 
-  list (nombre = "TGA - Reverse primer", secuencia = tag_secuencia),
-  list (nombre = "TAG - Reverse primer", secuencia = tga_secuencia), 
-  list (nombre = "TAA - Reverse primer", secuencia = taa_secuencia)
-)
-lista_primers
+#Adición de primers válidos, que no sean NULL
+primers_validos <- function (forward_primer, tga_rv_primer, tag_rv_primer, taa_rv_primer,
+                              fw_secuencia, tga_secuencia, tag_secuencia, taa_secuencia) {
+  lista_primers <- list()
+  # Forward primer
+  if (!is.null(fw_secuencia)) {
+    lista_primers <- append(lista_primers, list(list(nombre = "Forward primer", secuencia = fw_secuencia)))
+  }
+  # TGA - Reverse primer
+  if (!is.null(tga_secuencia)) {
+    lista_primers <- append(lista_primers, list(list(nombre = "TGA - Reverse primer", secuencia = tga_secuencia)))
+  }
+  # TAG - Reverse primer
+  if (!is.null(tag_secuencia)) {
+    lista_primers <- append(lista_primers, list(list(nombre = "TAG - Reverse primer", secuencia = tag_secuencia)))
+  }
+  # TAA - Reverse primer
+  if ( !is.null (taa_secuencia)) {
+    lista_primers <- append (lista_primers, list (list(nombre = "TAA - Reverse primer", 
+                                                       secuencia = taa_secuencia)))
+    }
+  return(lista_primers)
+}
 
-#Se separan los nombres de las secuencias para poder reescribirlos en un archivo FASTA 
-lista_secuencias <- c (lista_primers[[1]]$secuencia, lista_primers[[2]]$secuencia, lista_primers[[3]]$secuencia) 
-print(lista_secuencias)
+#Utilizar la función para solamente utilizar los primers válidos 
+primers_validos (forward_primer, tga_rv_primer, tag_rv_primer, taa_rv_primer,
+                 fw_secuencia, tga_secuencia, tag_secuencia, taa_secuencia)
+#Guardar en un objeto
+lista_primers <- primers_validos (forward_primer, tga_rv_primer, tag_rv_primer, taa_rv_primer,
+                                     fw_secuencia, tga_secuencia, tag_secuencia, taa_secuencia)
 
-lista_nombres <- c(lista_primers[[1]]$nombre, lista_primers[[2]]$nombre, lista_primers[[3]]$nombre)
-print (lista_nombres)
+#Generar listas por de secuencias y nombres para el archivo FASTA
 
-#sequinr los lee como listas 
-install.packages ("seqinr")
-library (seqinr)
+escribir_fasta <- function (lista_primers) {
+  lista_secuencias <- list ()
+  lista_nombres <- list ()   
+  
+  for (primer in lista_primers) {
+    lista_secuencias <- c(lista_secuencias, primer$secuencia)
+    lista_nombres <- c(lista_nombres, primer$nombre)
+  }
+  
+  if (length(lista_secuencias) > 0 | length(lista_nombres) > 0) {
+      library(seqinr)
+      write.fasta(sequences = lista_secuencias, 
+                  names = lista_nombres, 
+                  nbchar = 80, 
+                  file.out = "scrips/resultados/primers2.fasta")
+      print("Ver primers en carpeta de resultados")
+    }
+  }
 
-#Mandar a carpeta scripts en resultados 
-write.fasta (sequences = lista_secuencias, names = lista_nombres, nbchar = 80, file.out = "resultados/primers.fasta")
+escribir_fasta (lista_primers)
+
+
 
 
 
