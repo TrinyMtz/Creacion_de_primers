@@ -43,29 +43,30 @@ primer_fw <-function(inicio_codon, secun_prueba, ultima) {
           primer_fd <- subseq(secun_prueba, start=inicio, end=ultima) 
           ultima <- ultima + 1
           
+          final<-complement(primer_fd)
           ##### Eveluar condiciones de primer
           # Patrones
-          tripletes <- trinucleotideFrequency(primer_fd)
+          tripletes <- trinucleotideFrequency(final)
           patrones_malos <- tripletes[c(22, 43, 44, 16, 41, 49, 61)]
           no_hay <- c(0,0,0,0,0,0,0)
           comparacion <- all(patrones_malos == no_hay)
           
           if (comparacion == TRUE) { #Seguir evaluando el primer 
             # Poct de CG: 50-60 %
-            longt <- width(primer_fd)
-            cont_cg <- letterFrequency(primer_fd, "CG")
+            longt <- width(final)
+            cont_cg <- letterFrequency(final, "CG")
             porc_cg <- (cont_cg / longt) * 100
             
             if (porc_cg < 61 & porc_cg > 49) {#Seguir evaluando
               #Temperatura: 55 - 65 °C
-              cont_cg <- letterFrequency(primer_fd, "CG")
-              cont_at <- letterFrequency(primer_fd, "AT")
+              cont_cg <- letterFrequency(final, "CG")
+              cont_at <- letterFrequency(final, "AT")
               temperatura <- (4*cont_cg) + (2*cont_at)
               
               if (temperatura >54 & temperatura <66 ) {
                 
-                print("forward")
-                print(primer_fd)
+                print("Forward")
+                print(final)
                 print(paste("Porcentaje de CG: ", porc_cg))
                 print(paste("Tm: ", temperatura))
 
@@ -178,7 +179,7 @@ primer_rev_ct2<-function(tag1,secrev,ultima) {
   } 
 } 
 
-primer_rev_ct2(53,revertida, 20)#reverse TAG,sujeto a que tenga este patrón,puedes
+primer_rev_ct2(222,revertida, 20)#reverse TAG,sujeto a que tenga este patrón,puedes
 #jugar con los valores de start del objeto tga, considerando tu región codificante (CDS)
 
 
