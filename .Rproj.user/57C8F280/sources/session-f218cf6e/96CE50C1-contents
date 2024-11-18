@@ -36,7 +36,8 @@ Función `pre_fw` realiza un asesoramiento inicial de la secuencia
 codificante mediante el uso de la instrucción `if()` para verificar los
 siguientes requerimientos:
 
--   La clase del objeto que contiene la secuencia, debe ser DNAStringSet.
+-   La clase del objeto que contiene la secuencia, debe ser
+    DNAStringSet.
 -   No es degenerado
 -   Longitud de la secuencia \< 20,000 nucleótidos
 -   Contiene el codón de inicio ATG (para metionina)
@@ -83,9 +84,9 @@ pre_fw(secun_prueba1)
 
 ```
 
-#### Función *fw_primer**
+#### Función \*fw_primer\*\*
 
-`fw_primer` evalúa primers _forward_ potenciales tomando en cuenta 3
+`fw_primer` evalúa primers *forward* potenciales tomando en cuenta 3
 parámetros:
 
 -   Posición del codón de inicio
@@ -137,17 +138,22 @@ primer_fw <-function (inicio_codon, secun_prueba, ultima) {
   } 
 ```
 
-Un ciclo `while` hace una iteración tantas veces desde el codón de inicio hasta la última base de la secuencia, siempre y cuando la posición de la base en donde se inicia se encuentre sea correspondiente a un número dentro de la longitud de la secuencia.  
+Un ciclo `while` hace una iteración tantas veces desde el codón de
+inicio hasta la última base de la secuencia, siempre y cuando la
+posición de la base en donde se inicia se encuentre sea correspondiente
+a un número dentro de la longitud de la secuencia.
 
-El resultado es el primer, la secuencia complementaria, que es evaluado mediante instrucciones `if()` a fin de que cumpla los diferentes criterios:
+El resultado es el primer, la secuencia complementaria, que es evaluado
+mediante instrucciones `if()` a fin de que cumpla los diferentes
+criterios:
 
-***Evaluación*** 
+***Evaluación***
 
-* Longitud de 20 pb 
-+ Presencia de secuencias que favorecen la formación de horquillas: 
-  + Tripletes GGG, CCC, GGT, ATT, CGA, TAA o TTA 
-* Porcentaje de GC entre 50%-60% 
-+ Temperatura de fusión entre 55-65°C, se calcula como TM = 4GC + 2 AT
+-   Longitud de 20 pb
+-   Presencia de secuencias que favorecen la formación de horquillas:
+    -   Tripletes GGG, CCC, GGT, ATT, CGA, TAA o TTA
+-   Porcentaje de GC entre 50%-60%
+-   Temperatura de fusión entre 55-65°C, se calcula como TM = 4GC + 2 AT
 
 ***Ejemplo de aplicacón de la función***
 
@@ -158,17 +164,17 @@ primer_fw (32, secun_prueba1, 18) # Colocar el valor del start , secuencia, long
 Implementación completa en: [evaluar.R](scrips/evaluar.R).
 
 ## Primers *Reverse*
-Los primers _reverse_ se diseñan a partir de la secuencia reversa complementaria. 
-1. Identificación de los codones de paro (TGA, TAG y TAA)
-##### Como la secuencia fue revertida inicialmente, se busca complemento reverso de estos codones (AGT, GAT, AAT)
-2. Generación de la secuencia complementaria al ...
 
-Verificación de los mismos criterios 
-* Longitud de 20 pb 
-+ Presencia de secuencias que favorecen la formación de horquillas: 
-  + Tripletes GGG, CCC, GGT, ATT, CGA, TAA o TTA 
-* Porcentaje de GC entre 50%-60% 
-+ Temperatura de fusión entre 55-65°C (TM = 4GC + 2 AT)
+Los primers *reverse* se diseñan a partir de la secuencia reversa
+complementaria. 1. Identificación de los codones de paro (TGA, TAG y
+TAA) \##### Como la secuencia fue revertida inicialmente, se busca
+complemento reverso de estos codones (AGT, GAT, AAT) 2. Generación de la
+secuencia complementaria al ...
+
+Verificación de los mismos criterios \* Longitud de 20 pb + Presencia de
+secuencias que favorecen la formación de horquillas: + Tripletes GGG,
+CCC, GGT, ATT, CGA, TAA o TTA \* Porcentaje de GC entre 50%-60% +
+Temperatura de fusión entre 55-65°C (TM = 4GC + 2 AT)
 
 #### TGA - **primer_rev_ct1**
 
