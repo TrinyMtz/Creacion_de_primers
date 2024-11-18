@@ -135,3 +135,10 @@ TAG `primer_rev_ct2`
 #### TAA - **primer_rev_ct3**
 
 TAA `primer_rev_ct3`
+
+### Archivo FASTA 
+
+
+
+
+
