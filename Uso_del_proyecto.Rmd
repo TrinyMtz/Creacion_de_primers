@@ -9,12 +9,12 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-### R para primers
+## R para primers
 
 El diseño de primers con herramientas computacionales no es novedad, incluso hay
 paquetes en R que pueden ayudarte a esta tarea como openPrimeR de Bioconductor.
-Este proyecto, hace uso de ciclos, funciones y condiciones para encontrar primers 
-en secuencias de no más de 20 000 nucleótidos, sólo de DNA, sólo para eucariotas,
+Este proyecto hace uso de ciclos, funciones y condiciones para encontrar primers 
+en secuencias de no más de 20, 000 nucleótidos, sólo de DNA, sólo para eucariotas.
 
 
 
@@ -22,12 +22,67 @@ en secuencias de no más de 20 000 nucleótidos, sólo de DNA, sólo para eucari
 summary(cars)
 ```
 
-## Including Plots
+## Características para el diseño de primers
+* Específicos para la región de ADN que se amplificará
+* Longitud de 20 pb
+* Porcentaje de contenido GC de 50%-60%
+* Temperatura de fusión (Tm) dentro del rango de diseño: 55-65°C
+* Primers seben ser distintos entre sí, para evitar la formación de dímeros 
 
-You can also embed plots, for example:
+Este programa permite el diseño de primers *forward* (Fw) y *reverse* (rv)
+
 
 ```{r pressure, echo=FALSE}
 plot(pressure)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+## Pre-evaluación de la secuencia 
+Función ***pre_fw*** realiza un asesoramiento inicial de la secuencia para verificar los siguientes requerimientos:
+
+* La secuencia se trate de un DNAStringSet
++ No es degenerado 
+* Longitud de la secuencia < 20,000 nucleótidos 
++ Contiene el codón de inicio ATG (para metionina)
+
+
+```{r}
+pre_fw (secuencia)
+
+```
+
+
+## Primers *Forward*
+El primer *forward* debe ser complementario a la cadena de ADN a la que se une. 
+Este se une a la cadena antisentido del ADN, la regi+on no codificante. 
+
+####Función ***fw_primer*** 
+mediante un ciclo while, que evalúa desde
+el codón de inicio 
+
+una función 
+
+
+##### Evaluación del primer *forward*
+* Longitud de 20 pb 
++ Presencia de secuencias que favorecen la formación de horquillas:
+    * Tripletes GGG, CCC, GGT, ATT, CGA, TAA o TTA
+* Porcentage de GC entre 50%-60%
++ Temperatura de fusión entre 55-65°C, se calcula como TM = 4GC + 2 AT
+
+Implementación completa en: [evaluar.R](scrips/evaluar.R).
+
+
+## Primers *Reverse*
+
+
+#### Primer *reverse* y codones 
+#####
+***primer_rev_ct1***
+
+
+***primer_rev_ct2***
+
+
+***primer_rev_ct3***
+
+

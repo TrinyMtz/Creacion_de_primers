@@ -241,16 +241,6 @@ print (taa_secuencia)
 class(taa_secuencia)
 
 
-## FASTA
-mandar_fasta <- function (primers, nombres) {
-  fileConn <- file(filename) for (i in seq_along(primers)) 
-  { cat(paste0 (">primer_", i, "\n", 
-               as.character(primers[[i]]), 
-               "\n"), file = fileConn) } 
-  close(fileConn) 
-  }
-
-
 #Combinar los primers en una lista, todos son DNA Strings en una lista 
 lista_primers <- list (
   list (nombre = "Forward primer", secuencia = fw_secuencia), 

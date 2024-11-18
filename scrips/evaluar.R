@@ -38,7 +38,7 @@ pre_fw(secun_prueba1) #Si el patrón está muy cerca, porque está más de una v
 
 #  GENERADOR DE PRIMERS FORWARD
 
-primer_fw <-function(inicio_codon, secun_prueba, ultima) {
+primer_fw <-function (inicio_codon, secun_prueba, ultima) {
   detener <- inicio_codon - ultima
   inicio <- 0
   while (inicio <= detener & ultima < inicio_codon ) {
@@ -73,7 +73,7 @@ primer_fw <-function(inicio_codon, secun_prueba, ultima) {
                 print("Forward")
                 print(final)
                 print(paste("Porcentaje de CG: ", porc_cg))
-                print(paste("Tm: ", temperatura))
+                cat ("Tm: ", temperatura, "°C\n")
 
               }
               }
@@ -83,7 +83,7 @@ primer_fw <-function(inicio_codon, secun_prueba, ultima) {
 
 
 
-primer_fw(32, secun_prueba1, 18) # Colocar el valor del start , secuencia, long del primer. 
+primer_fw (32, secun_prueba1, 18) # Colocar el valor del start , secuencia, long del primer. 
 
                    ############################
 ####################     PRIMERS REVERSE      ############################
@@ -129,7 +129,7 @@ primer_rev_ct1<-function(tga1,secrev,ultima) {
           print("reverse tga")
           print(primer_rv)
           print(paste("Porcentaje de CG: ", porc_cg))
-          print(paste("Tm: ", temperatura))
+          cat ("Tm: ", temperatura, "°C/n")
         }
       }
     }
@@ -177,7 +177,7 @@ primer_rev_ct2<-function(tag1,secrev,ultima) {
           print("reverse tag")
           print(primer_rv)
           print(paste("Porcentaje de CG: ", porc_cg))
-          print(paste("Tm: ", temperatura))
+          cat ("Tm: ", temperatura, "°C/n")
         }
       }
     }
@@ -221,7 +221,7 @@ primer_rev_ct3<-function(taa1,secrev,ultima) {
           print("reverse taa")
           print(primer_rv)
           print(paste("Porcentaje de CG: ", porc_cg))
-          print(paste("Tm: ", temperatura))
+          cat ("Tm: ", temperatura, "°C/n")
         }
       }
     }
