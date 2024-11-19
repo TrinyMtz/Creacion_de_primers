@@ -1,0 +1,189 @@
+---
+title: "R_para_primers"
+author: "bo, Triny, JuGo"
+date: "2024-11-17"
+output:
+  pdf_document: default
+  html_document: default
+editor_options:
+  markdown:
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R para primers
+
+El diseño de primers con herramientas computacionales no es novedad,
+incluso hay paquetes en R que pueden ayudarte a esta tarea como
+openPrimeR de Bioconductor. Este proyecto hace uso del programa
+Biostrings, ciclos, funciones y condiciones para encontrar primers en
+secuencias de no más de 20,000 nucleótidos, sólo de DNA, sólo para
+eucariotas.
+
+Este programa permite el diseño de primers *forward* (Fw) y *reverse*
+(rv)
+
+```{r, echo=FALSE}
+plot(pressure)
+```
+
+## Pre-evaluación de la secuencia
+
+Función `pre_fw` realiza un asesoramiento inicial de la secuencia
+codificante mediante el uso de la instrucción `if()` para verificar los
+siguientes requerimientos:
+
+-   La clase del objeto que contiene la secuencia, debe ser
+    DNAStringSet.
+-   No es degenerado
+-   Longitud de la secuencia \< 20,000 nucleótidos
+-   Contiene el codón de inicio ATG (para metionina)
+
+## Creación de la función para evaluar la secuencia
+
+```{r, include = TRUE}
+pre_fw <- function(secun_prueba) {
+  tipo_sec <- class(secun_prueba)
+  tipo_sec[1]
+  
+  # Para evaluar tipo de secuencia
+  if (tipo_sec[1] == "DNAStringSet") {
+   
+     # Comprobar que no es degenerado
+    no_degenerado <- alphabetFrequency(secun_prueba, baseOnly=TRUE)
+    if (no_degenerado[5] == 0) {
+      
+      # Verificar el largo de la secuencia
+      longt <- width(secun_prueba)
+      if ( longt < 20000) {
+        
+        # Codon de inicio: TAC -> ATG
+        codon_in <- vmatchPattern ("ATG", secun_prueba)
+        codon_in[[1]][1]
+        print(codon_in)
+      } else { 
+        print("La capacidad maxima es de 20,000 nucleotidos")}}
+  } else { 
+      print("Cambiar a DNA")
+    }
+  }
+
+```
+
+***Uso de la funcion***
+
+```{r, include = TRUE}
+secun_prueba1 <- readDNAStringSet("Creacion_de_primers/extras/gallus.fasta") # 1. Cargar secuencia
+
+pre_fw(secun_prueba1) 
+
+# El codon de inicio: si está muy cerca, porque está más de una vez, intenete con otras posiciones
+
+```
+
+#### Función \*fw_primer\*\*
+
+`fw_primer` evalúa primers *forward* potenciales tomando en cuenta 3
+parámetros:
+
+-   Posición del codón de inicio
+-   Secuencia a evaluar
+-   Longitud de la secuencia a evaluar
+
+```{r, include=TRUE}
+primer_fw <-function (inicio_codon, secun_prueba, ultima) {
+  detener <- inicio_codon - ultima
+  inicio <- 0
+  while (inicio <= detener & ultima < inicio_codon ) {
+          inicio <- inicio + 1  
+          primer_fd <- subseq (secun_prueba, start=inicio, end=ultima) 
+          ultima <- ultima + 1
+          
+          final<-complement(primer_fd)
+          ##### Eveluar condiciones de primer
+          # Patrones
+
+          tripletes <- trinucleotideFrequency(final)
+          patrones_malos <- tripletes[c(22, 43, 44, 16, 41, 49, 61)]
+          no_hay <- c(0,0,0,0,0,0,0)
+          comparacion <- all(patrones_malos == no_hay)
+          
+          if (comparacion == TRUE) { #Seguir evaluando el primer 
+
+            # Poct de CG: 50-60 %
+            longt <- width(final)
+            cont_cg <- letterFrequency(final, "CG")
+            porc_cg <- (cont_cg / longt) * 100
+            
+            if (porc_cg < 61 & porc_cg > 49) {#Seguir evaluando
+              #Temperatura: 55 - 65 °C
+              cont_cg <- letterFrequency(final, "CG")
+              cont_at <- letterFrequency(final, "AT")
+              temperatura <- (4*cont_cg) + (2*cont_at)
+              
+              if (temperatura >54 & temperatura <66 ) {
+                
+                print("Forward")
+                print(final)
+                print(paste("Porcentaje de CG: ", porc_cg))
+                print(paste("Tm: ", temperatura,"°C"))
+
+              }
+              }
+          }
+          } 
+  } 
+```
+
+Un ciclo `while` hace una iteración tantas veces desde el codón de
+inicio hasta la última base de la secuencia, siempre y cuando la
+posición de la base en donde se inicia se encuentre sea correspondiente
+a un número dentro de la longitud de la secuencia.
+
+El resultado es el primer, la secuencia complementaria, que es evaluado
+mediante instrucciones `if()` a fin de que cumpla los diferentes
+criterios:
+
+***Evaluación***
+
+-   Longitud de 20 pb
+-   Presencia de secuencias que favorecen la formación de horquillas:
+    -   Tripletes GGG, CCC, GGT, ATT, CGA, TAA o TTA
+-   Porcentaje de GC entre 50%-60%
+-   Temperatura de fusión entre 55-65°C, se calcula como TM = 4GC + 2 AT
+
+***Ejemplo de aplicacón de la función***
+
+```{r, include=TRUE}
+primer_fw (32, secun_prueba1, 18) # Colocar el valor del start , secuencia, long del primer.
+```
+
+Implementación completa en: [evaluar.R](scrips/evaluar.R).
+
+## Primers *Reverse*
+
+Los primers *reverse* se diseñan a partir de la secuencia reversa
+complementaria. 1. Identificación de los codones de paro (TGA, TAG y
+TAA) \##### Como la secuencia fue revertida inicialmente, se busca
+complemento reverso de estos codones (AGT, GAT, AAT) 2. Generación de la
+secuencia complementaria al ...
+
+Verificación de los mismos criterios \* Longitud de 20 pb + Presencia de
+secuencias que favorecen la formación de horquillas: + Tripletes GGG,
+CCC, GGT, ATT, CGA, TAA o TTA \* Porcentaje de GC entre 50%-60% +
+Temperatura de fusión entre 55-65°C (TM = 4GC + 2 AT)
+
+#### TGA - **primer_rev_ct1**
+
+TGA `primer_rev_ct1`
+
+#### TAG - **primer_rev_ct2**
+
+TAG `primer_rev_ct2`
+
+#### TAA - **primer_rev_ct3**
+
+TAA `primer_rev_ct3`
