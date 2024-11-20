@@ -1,0 +1,26 @@
+{
+    "id": "8EEF5BD3",
+    "path": "C:/Users/julie/OneDrive/Escritorio/R/Bioinformática/Creacion_de_primers/scrips/script_fasta.R",
+    "project_path": "scrips/script_fasta.R",
+    "type": "r_source",
+    "hash": "3430785074",
+    "contents": "",
+    "dirty": false,
+    "created": 1732057795177.0,
+    "source_on_save": false,
+    "relative_order": 2,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "186,11",
+        "scrollLine": "158"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1732074052,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1732074052561,
+    "read_only": false,
+    "read_only_alternatives": []
+}
