@@ -287,25 +287,25 @@ length(taa_primers)
 #Adición de primers válidos, que no sean NULL
 primers_validos <- function(fw_primers, tga_primers, tag_primers, taa_primers) {
   lista_primers <- list()
-  #Forward 
+  #forward 
   if (!is.null(fw_primers)) {
     for (primer in fw_primers) {
       lista_primers <- c(lista_primers, list(list(nombre = "Forward primer", secuencias = primer$primer)))
     }
   }
-  #TGA
+  #TGA reverso
   if (!is.null(tga_primers)) {
     for (primer in tga_primers) {
       lista_primers <- c(lista_primers, list(list(nombre = "TGA - Reverse primer", secuencias = primer$primer)))
     }
   }
-  #TAG 
+  #TAG reverso
   if (!is.null(tag_primers)) {
     for (primer in tag_primers) {
       lista_primers <- c(lista_primers, list(list(nombre = "TAG - Reverse primer", secuencias = primer$primer)))
     }
   }
-  #TAA
+  #TAA reverso
   if (!is.null(taa_primers)) {
     for (primer in taa_primers) {
       lista_primers <- c(lista_primers, list(list(nombre = "TAA - Reverse primer", secuencias = primer$primer)))

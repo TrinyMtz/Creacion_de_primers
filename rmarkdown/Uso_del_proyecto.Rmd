@@ -1,6 +1,6 @@
 ---
 title: "R_para_primers"
-author: "bo, Triny, JuGo"
+author: "Blanca, Trinidad, Julie"
 date: "2024-11-17"
 output:
   pdf_document: default
@@ -26,9 +26,6 @@ eucariotas.
 Este programa permite el diseño de primers *forward* (Fw) y *reverse*
 (rv)
 
-```{r, echo=FALSE}
-plot(pressure)
-```
 
 ## Pre-evaluación de la secuencia
 
@@ -187,3 +184,98 @@ TAG `primer_rev_ct2`
 #### TAA - **primer_rev_ct3**
 
 TAA `primer_rev_ct3`
+
+## Archivo FASTA
+
+* Requiere que los primers sean guardados en una lista
+* Uso de 2 funciones:
+  1. Adición de secuencias de primer a una lista 
+  2. Conversión de la lista de primers válidos a FASTA
+* Uso del paquete seqinr para uso de `write.fasta`
+
+
+***
+***
+
+```{r}
+#Objetos con las funciones
+primer_fw (32, secun_prueba1, 18) -> fw_primers
+
+primer_rev_ct1 (114, revertida, 20) -> tga_primers
+
+primer_rev_ct2 (222, revertida, 20) -> tag_primers
+
+primer_rev_ct3 (37, revertida, 20) -> taa_primers
+```
+
+#### 1) Función `primers_validos`
+Adición de primers válidos, que no den como resultado una `list ()` o un `NULL`
+
+```{r}
+primers_validos <- function (fw_primers, tga_primers, tag_primers, taa_primers) {
+  lista_primers <- list()
+  #forward 
+  if (!is.null(fw_primers)) {
+    for (primer in fw_primers) {
+      lista_primers <- c(lista_primers, list(list(nombre = "Forward primer", secuencias = primer$primer)))
+    }
+  }
+  #TGA reverso
+  if (!is.null(tga_primers)) {
+    for (primer in tga_primers) {
+      lista_primers <- c(lista_primers, list(list(nombre = "TGA - Reverse primer", secuencias = primer$primer)))
+    }
+  }
+  #TAG reverso
+  if (!is.null(tag_primers)) {
+    for (primer in tag_primers) {
+      lista_primers <- c(lista_primers, list(list(nombre = "TAG - Reverse primer", secuencias = primer$primer)))
+    }
+  }
+  #TAA reverso
+  if (!is.null(taa_primers)) {
+    for (primer in taa_primers) {
+      lista_primers <- c(lista_primers, list(list(nombre = "TAA - Reverse primer", secuencias = primer$primer)))
+    }
+  }
+  return(lista_primers)
+}
+
+#Guardar en un objeto 
+lista_primers <- primers_validos (fw_primers, tga_primers, tag_primers, taa_primers)
+
+```
+
+#### 2) Función `escribir.fasta`
+
+Escribir la lista a un archivo FASTA
+
+```{r}
+escribir_fasta <- function (lista_primers) {
+  lista_secuencias <- list ()
+  lista_nombres <- list ()   
+  
+  for (primer in lista_primers) {
+    secuencias <- as.character (primer$secuencias) #sino se imprime todo el DNAStringSet en el fasta
+    lista_secuencias <- c(lista_secuencias, secuencias)
+    lista_nombres <- c(lista_nombres, primer$nombre)
+  }
+  
+  if (length(lista_secuencias) > 0  & length(lista_nombres) > 0) {
+    library(seqinr)
+    write.fasta (sequences = lista_secuencias, 
+                names = lista_nombres, 
+                nbchar = 80, 
+                file.out = "resultados_FASTA/primers.fasta")
+    print("Ver primers en carpeta de resultados")
+  }
+}
+
+escribir_fasta (lista_primers)
+
+```
+
+
+
+
+
