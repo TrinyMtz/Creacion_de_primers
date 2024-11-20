@@ -340,7 +340,7 @@ escribir_fasta <- function (lista_primers) {
     write.fasta (sequences = lista_secuencias, 
                 names = lista_nombres, 
                 nbchar = 80, 
-                file.out = "resultados_FASTA/primers.fasta")
+                file.out = "resultados/gallus_primer.fasta")
     print("Ver primers en carpeta de resultados")
   }
 }

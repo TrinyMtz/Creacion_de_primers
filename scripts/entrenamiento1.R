@@ -25,6 +25,7 @@ pre_fw <- function(secun_prueba) {
         # Codon de inicio: TAC -> ATG
         codon_in <- vmatchPattern("ATG", secun_prueba)
         codon_in[[1]][1]
+        print(codon_in)
       } else { print("La capacidad maxima es de 20,000 nucleotidos")}}} else { print("Cambiar a DNA")}
 }
 
@@ -76,7 +77,7 @@ primer_fw <-function(inicio_codon, secun_prueba, ultima) {
 } 
 
 
-primer_fw(150, secun_prueba1, 21) # Colocar el valor del start , secuencia, long del primer. 
+primer_fw(63, secun_prueba1, 21) # Colocar el valor del start , secuencia, long del primer. 
 #Hasta 150 encuentra 2, pero se pasa por más de la mitad del límite
 
 ############################
@@ -478,6 +479,7 @@ pre_fw <- function(secun_prueba) {
         # Codon de inicio: TAC -> ATG
         codon_in <- vmatchPattern("ATG", secun_prueba)
         codon_in[[1]][1]
+        print(codon_in)
       } else { print("La capacidad maxima es de 20,000 nucleotidos")}}} else { print("Cambiar a DNA")}
 }
 
