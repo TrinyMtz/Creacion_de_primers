@@ -1,0 +1,35 @@
+---
+title: "R_para_primers"
+author: "bo"
+date: "2024-11-17"
+output: html_document
+---
+
+### R para primers
+
+El diseño de primers con herramientas computacionales no es novedad, incluso hay
+paquetes en R que pueden ayudarte a esta tarea como openPrimeR de Bioconductor.
+Este proyecto, hace uso de ciclos, funciones y condiciones para encontrar primers 
+en secuencias de no más de 20 000 nucleótidos, sólo de DNA, sólo para eucariotas.
+
+Este script, será un apoyo en el diseño de primers.Dentro de este, encontrarás que
+no es solo introducir la secuencia, sino que te permite explorar los márgenes de 
+tolerancia que deseas en tu diseño.
+
+##Obtener la secuencia
+Si no tienes secuencias propias, puedes acceder a NCBI y descargar un archivo
+.fasta para practicar. Una guí de cómo hacerlo se muestra a continuación:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
