@@ -26,7 +26,6 @@ eucariotas.
 Este programa permite el diseño de primers *forward* (Fw) y *reverse*
 (rv)
 
-
 ## Pre-evaluación de la secuencia
 
 Función `pre_fw` realiza un asesoramiento inicial de la secuencia
@@ -187,15 +186,15 @@ TAA `primer_rev_ct3`
 
 ## Archivo FASTA
 
-* Requiere que los primers sean guardados en una lista
-* Uso de 2 funciones:
-  1. Adición de secuencias de primer a una lista 
-  2. Conversión de la lista de primers válidos a FASTA
-* Uso del paquete seqinr para uso de `write.fasta`
+-   Requiere que los primers sean guardados en una lista
+-   Uso de 2 funciones:
+    1.  Adición de secuencias de primer a una lista
+    2.  Conversión de la lista de primers válidos a FASTA
+-   Uso del paquete seqinr para uso de `write.fasta`
 
+------------------------------------------------------------------------
 
-***
-***
+------------------------------------------------------------------------
 
 ```{r}
 #Objetos con las funciones
@@ -209,7 +208,9 @@ primer_rev_ct3 (37, revertida, 20) -> taa_primers
 ```
 
 #### 1) Función `primers_validos`
-Adición de primers válidos, que no den como resultado una `list ()` o un `NULL`
+
+Adición de primers válidos, que no den como resultado una `list ()` o un
+`NULL`
 
 ```{r}
 primers_validos <- function (fw_primers, tga_primers, tag_primers, taa_primers) {
@@ -274,8 +275,3 @@ escribir_fasta <- function (lista_primers) {
 escribir_fasta (lista_primers)
 
 ```
-
-
-
-
-
