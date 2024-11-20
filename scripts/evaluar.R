@@ -1,6 +1,6 @@
 ###################
 library(Biostrings)
-install.packages ("seqinr)
+install.packages ("seqinr")
                   
 # Lectura de la secuencia
 secun_prueba1 <- readDNAStringSet("Creacion_de_primers/extras/gallus.fasta")
